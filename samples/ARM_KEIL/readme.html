@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<BODY DIR="LTR">
+<H1>Code Coverage with the ARM C/C++ Compiler</H1>
+<H3>Introduction</H3>
+<P>Developing for an embedded environment can often leave you
+juggling for space. Squish Coco is designed with such constraints in
+mind, making instrumentation and code coverage possible even on
+embedded environments.</P>
+<P>Squish Coco separates the coverage data creation from the
+analysis, enabling users performing cross-compilation to host the
+compiler on a separate platform. The execution data is gathered on
+the target platform, while the analysis occurs on the desktop
+platform and can be viewed using the CoverageBrowser.</P>
+<P>The detection of sequential blocks creates a more compact
+instrumentation than the traditional line coverage approach.
+Additional size reductions are implemented using command-line
+parameters to disable the condition, decision and statement coverage
+analysis. Because Squish Coco instruments the source code utilizing
+the user&rsquo;s toolchain, both debug and release, or optimized code
+can be used. The only requirement for the target system is the
+<TT>malloc()</TT> function. Filesystems and Ethernet devices
+are not necessary.</P>
+<P ALIGN=JUSTIFY>This article demonstrates how to instrument a small
+ARM application that reads data from an AD device on a simulator.</P>
+<H3>Getting started with ARM Keil &mu;Vision</H3>
+<P>To setup the playground you&rsquo;ll need the<A HREF="http://www.keil.com/arm/mdk.asp" TARGET="_blank">
+ARM Keil &mu;Vision</A> toolchain and <A HREF="http://www.froglogic.com/squish/coco/" TARGET="_blank">Squish
+Coco</A>. The new Squish Coco release already includes the <EM>Blinky</EM>
+example.</P>
+<H4>Setup the Squish Coco toolchain</H4>
+<P>Squish Coco provides compiler and linker wrappers which replace
+the ARM command-line tools. It behaves identical to the original
+toolchain except when activated with the command-line switch <TT>--cs-on</TT>.</P>
+<H5 CLASS="western">Specify the path of the Squish Coco toolchain in
+ARM Keil uVision:</H5>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Open the ARM Keil &mu;Vision IDE 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Click <STRONG>Project</STRONG> &gt;
+	<STRONG>Manage</STRONG> and select <STRONG>Components, Environments,
+	Books&hellip;</STRONG> 
+	</P>
+	<LI><P>Select <STRONG>Folders/Extensions</STRONG>, click the <STRONG>ARMCC
+	Folder:</STRONG> box, and replace <TT>.\ARMCC\bin</TT> with
+	<TT>.\SquishCoco\bin</TT>. 
+	</P>
+</OL>
+<H5 CLASS="western">Activate the code coverage analysis for the
+compiler and linker:</H5>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">Click <STRONG>Project</STRONG> and
+	select <STRONG>Option for Target&hellip;</STRONG> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Select the <STRONG>C/C++</STRONG>
+	tab 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Click the <STRONG>Misc Controls</STRONG>
+    box and enter <TT>--cs-on</TT>. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Select the <STRONG>Linker</STRONG>
+	tab 
+	</P>
+	<LI><P>Click the <STRONG>Misc Controls</STRONG> box and enter
+	<TT>--cs-on</TT>. 
+	</P>
+</OL>
+<H4>Generate an execution report</H4>
+<P>For desktop applications, the default instrumentation behavior is
+to save an execution report to a file when the application closes.
+This does not apply to embedded devices because most embedded
+applications never close and also lack a file system. This is why
+it&rsquo;s necessary necessary to define how and when the execution
+reports are generated.</P>
+<H5>Report generation trigger</H5>
+<P>For a real application it is necessary to define a trigger to save
+the execution report. Triggers can consist of keyboard events,
+digital input signals, CAN-Bus messages, etc. The trigger handler
+contains the following code snippet to save the code coverage
+information:<BR><CODE CLASS="western">#ifdef
+__COVERAGESCANNER__<BR>__coveragescanner_save();<BR>__coveragescanner_clear();<BR>#endif</CODE><BR>The
+<TT>__COVERAGESCANNER__</TT> definition is automatically
+defined in instrumented code. The execution report saves using
+<TT>__coveragescanner_save()</TT>, while the
+<TT>__coveragescanner_clear()</TT> resets all execution
+counters paving the way for a clean report in the future.</P>
+<H5 CLASS="western">Communication link</H5>
+<P>The function <TT>__coveragescanner_set_custom_io()</TT>
+setups up the communication link used to transmit the coverage
+information. Typically three functions are required (<TT>fopen()</TT>,
+<TT>fputs()</TT> and <TT>fclose()</TT>) allowing an
+UART or CAN identifier to upload the data.&nbsp;The use of more
+sophisticated protocols, such as SFTP for networking devices, is also
+available.</P>
+<P>In the simulated device, you&rsquo;ll use the ITMLOG channel, a
+virtual serial device between an application and the ARM simulator.
+Only the <TT>fputs()</TT> function needs to be implemented
+because this channel does not require initialization or being closed:</P>
+<PRE CLASS="western">#if defined( __COVERAGESCANNER__ )
+static int csfputs(const char *s, void *stream) {
+#define COVERAGESCANNER_ITM_CHANNEL 10
+  if (
+       (ITM-&gt;TCR &amp; ITM_TCR_ITMENA_Msk)&nbsp;&nbsp;/* ITM enabled */
+            &amp;&amp;
+       (ITM-&gt;TER &amp; (1UL &lt;&lt; COVERAGESCANNER_ITM_CHANNEL)&nbsp;)&nbsp; /* ITM Port&nbsp; enabled */
+      )
+    {
+       while ( *s != '\0' )
+       {
+          while (ITM-&gt;PORT[COVERAGESCANNER_ITM_CHANNEL].u32 == 0);
+          ITM-&gt;PORT[COVERAGESCANNER_ITM_CHANNEL].u8 = (uint8_t) *s;
+          s++;
+       }
+    }
+  return 0;
+}
+static void *csfopenappend(const char *path) { return (void*)1;}
+static int csfclose(void *fp) { return 1; }
+#endif
+
+int main (void) {
+.....
+#ifdef __COVERAGESCANNER__
+  __coveragescanner_set_custom_io( 
+          NULL,
+          csfputs,
+          csfopenappend,
+          NULL,
+          NULL,
+          csfclose,
+          NULL );
+#endif</PRE><H4 CLASS="western">
+<A NAME="more-696"></A>Test and inspect the coverage report</H4>
+<H5 CLASS="western">Simulation</H5>
+<OL>
+	<LI><P>Setup the ITMLOG output file in the simulator command prompt
+	prior to starting the simulation to capture the output of the
+	channel to a file: 
+	</P>
+	<PRE CLASS="western" STYLE="margin-bottom: 0.5cm">ITMLOG 10 &gt; c:\coverage.csexe</PRE>
+	<LI><P STYLE="margin-bottom: 0cm">Start the simulation and wait
+	approximately thirty seconds for it to complete. 
+	</P>
+	<LI><P>A message displays in the debug output window upon
+	completion, at which time the simulation can be stopped. 
+	</P>
+	<LI><P>Then close the ITMLOG output:</P>
+	<PRE CLASS="western" STYLE="margin-bottom: 0.5cm">ITMLOG 10 OFF</PRE><P>
+	</P>
+</OL>
+<H3 CLASS="western">Inspect the code coverage</H3>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">In <STRONG>CoverageBrowser</STRONG>
+	open <TT>Blinky.axf.csmes</TT> and load the
+	<TT>c:\coverage.csexe</TT> execution report 
+	</P>
+	<LI><P>The executed and un-executed Blinky example code display.</P>
+</OL>
+</BODY>
+</HTML>

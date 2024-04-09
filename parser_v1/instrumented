@@ -1,0 +1,11 @@
+#!/bin/bash
+
+. getcoco.sh			# Get Coco variables
+
+export PATH=$COCO_WRAPPER_DIR:$PATH
+export COVERAGESCANNER_ARGS='--cs-on'
+export COVERAGESCANNER_ARGS+=' --cs-mcdc'
+export COVERAGESCANNER_ARGS+=' --cs-mcc'
+export COVERAGESCANNER_ARGS+=' --cs-function-profiler=all'
+
+"$@"

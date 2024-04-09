@@ -1,0 +1,99 @@
+<HTML>
+    <HEAD>
+    </HEAD>
+    <BODY>
+        <H1>JUnit unit test of C++ code</H1>
+        <P>This example demonstrate how to record the execution report of each
+        JUnit unit test of a C++ code. The C++ code is binded to Java
+        through the JNI mechanism, but for projects using JNA the same
+        mechanism should work.</P>
+        <P>The code coverage information can be saved with two different
+        granularities:
+        <OL>
+            <LI> <I>The code coverage for the complete suite only</I>:
+            for this use case, it is only necessary to compile the C++ code
+            using CoverageScanner and import the test results and no
+            extension of the original source code is necessary.
+            </LI>
+            <LI> <I>The code coverage for each test item</I>:
+            for this use case, it is necessary to write an own unit test
+            listener which saves the coverage information upon each test
+            execution and export the CoverageScanner API from the C++
+            DLL to the Java code.<BR>
+            Even if it is necessary to extend the original project, this
+            method permits:
+            <UL>
+                <LI> to compute the code coverage information for each
+                unit test separately,</LI>
+                <LI> to record the execution status (passed or failed)
+                and </LI>
+                <LI> to save the report failure into the code coverage
+                report.</LI>
+            </UL> </LI>
+        </OL>
+        </P>
+
+        <H1>Code coverage for the complete suite only</H1>
+
+        <P>The full C++ code need to be compiled with CoverageScanner.</P>
+        <P>To do it with the provided sample, open a console window and
+        execute:
+        <TABLE>
+            <TR>
+                <TH>On Windows</TH>        <TH>On Unix</TH>
+            </TR>
+            <TR>
+                <TD>all_unit_test.bat</TD> <TD>all_unit_test.sh</TD>
+            </TR>
+        </TABLE>
+        </P>
+        <P>
+        After executing the script, <a
+            href="code.lib.csmes">code.lib.csmes</a> will contains the
+        code coverage report and can be inspected using CoverageBrowser.
+        A HTML report (<a href="code.html">code.html</a>) is also
+        generated.
+        </P>
+
+        <H1>code coverage for each test item</H1>
+
+        <P>
+        To compute the code coverage for each unit test, it is necessary
+        to:
+        <OL>
+            <LI> 
+            <U>Export the CoverageScanner API from the C++ DLL.</U> The file
+            <a href="CppCode.cpp">CppCode.cpp</a> and <a
+                href="CppCode.java">CppCode.java</a> export all this
+            functions whose name starts with <TT>__coveragescanner_</TT>.
+            </LI>
+            <LI> 
+            <U>Save the code coverage information in a JUnit
+                listener.</U> The listener <a
+                href="CodeCoverageListener.java">CodeCoverageListener.java</a>
+            save it with the execution status (passed and failed) and a
+            failure report.
+            </LI>
+        </OL>
+        </P>
+
+        <P>To do it with the provided sample, open a console window and
+        execute:
+        <TABLE>
+            <TR>
+                <TH>On Windows</TH>         <TH>On Unix</TH>
+            </TR>
+            <TR>
+                <TD>each_unit_test.bat</TD> <TD>each_unit_test.sh</TD>
+            </TR>
+        </TABLE>
+        </P>
+        <P>
+        After executing the script, <a
+            href="code.lib.csmes">code.lib.csmes</a> will contains the
+        code coverage report and can be inspected using CoverageBrowser.
+        A HTML report (<a href="code.html">code.html</a>) is also
+        generated.
+        </P>
+    </BODY>
+</HTML>

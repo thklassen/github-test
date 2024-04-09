@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial", "Tutorial\Tutorial.csproj", "{1647EAC3-F397-42A9-A26F-5D84466950D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTutorial", "TestTutorial\TestTutorial.csproj", "{FC0D94F3-51F4-49FA-98D9-C2EC4567A69E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3395539-99CC-4DF7-A0F1-0C046E562550}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+		Tutorial.vsmdi = Tutorial.vsmdi
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Tutorial.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1647EAC3-F397-42A9-A26F-5D84466950D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1647EAC3-F397-42A9-A26F-5D84466950D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1647EAC3-F397-42A9-A26F-5D84466950D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1647EAC3-F397-42A9-A26F-5D84466950D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0D94F3-51F4-49FA-98D9-C2EC4567A69E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0D94F3-51F4-49FA-98D9-C2EC4567A69E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0D94F3-51F4-49FA-98D9-C2EC4567A69E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0D94F3-51F4-49FA-98D9-C2EC4567A69E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

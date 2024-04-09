@@ -1,0 +1,43 @@
+diff -u parser_v2/parser.cpp parser_v3/parser.cpp
+--- parser_v2/parser.cpp	2015-08-18 13:04:10.038867061 +0200
++++ parser_v3/parser.cpp	2015-08-18 13:04:10.090866749 +0200
+@@ -132,8 +132,7 @@
+  */
+ bool isWhiteSpace(const char c)
+ {
+-    if (c == 0) return 0;
+-    return c == 32 || c == 9;  // space or tab
++    return isspace(c);
+ }
+ 
+ /*
+@@ -160,8 +159,7 @@
+  */
+ bool isAlpha(const char c)
+ {
+-    if (c == 0) return 0;
+-    return strchr("ABCDEFGHIJKLMNOPQRSTUVWXYZ_", toupper(c)) != 0;
++    return c == '_' || isalpha(c);
+ }
+ 
+ /*
+@@ -169,8 +167,7 @@
+  */
+ bool isDigitDot(const char c)
+ {
+-    if (c == 0) return 0;
+-    return strchr("0123456789.", c) != 0;
++    return isdigit(c) || c == '.';
+ }
+ 
+ /*
+@@ -178,8 +175,7 @@
+  */
+ bool isDigit(const char c)
+ {
+-    if (c == 0) return 0;
+-    return strchr("0123456789", c) != 0;
++    return isdigit(c);
+ }
+ 
+ 

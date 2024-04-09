@@ -1,0 +1,50 @@
+<HTML>
+    <HEAD>
+        <TITLE>NUnit Sample</TITLE>
+    </HEAD>
+    <BODY>
+
+        <H1>Installation</H1>
+        <OL>
+            <LI> 
+            Build the NUnit addin using Visual Studio 2010.
+            </LI>
+            <LI> 
+            Copy <TT>NUnitSquishCoco.dll</TT> to the addin folder of NUnit.
+            </LI>
+        </OL>
+
+        <H1>Setup</H1>
+        <P>
+        Edit the <TT>build.bat</TT> script and set the <TT>NUNIT</TT> to the path of the NUnit main installation folder.
+        </P>
+
+        <H1>Execution</H1>
+
+        <P>
+        The sample is performing following steps:
+        <OL>
+            <LI> 
+            Compilation of <TT>tutorial_nunit.dll</TT> with Squish Coco's compiler
+            wrapper:<BR>
+            after the build, the instrumentation database <TT>tutorial_nunit.dll.csmes</TT> is
+            generated.
+            </LI>
+            <LI>
+            Execution of the unit tests using <TT>nunit-console.exe</TT>:<BR> 
+            during the execution of the tests, the execution report
+            <TT>tutorial_nunit.dll.csexe</TT> is generated for each single unit
+            test.
+            </LI>
+            <LI>
+            Import of the execution report into the instrumentation database:<BR> 
+            the instrumentation database is now containing the code coverage information for all unit tests.
+            </LI>
+            <LI>
+            Open the instrumentation database with CoverageBrowser.
+            </LI>
+        </OL>
+
+    </BODY>
+</HTML>
+

@@ -1,0 +1,34 @@
+import glob
+import os
+from os.path      import pathsep
+
+# The command line argument 'coverage' permits to pass the command lien arguments
+# for CoverageScanner.
+#
+# Example:
+#  To instrument the current application:
+#    scons coverage="--cs-on"
+#  To instrument with code coverage count metric:
+#    scons coverage="--cs-on --cs-count"
+coverage = ARGUMENTS.get( 'coverage', '' )
+
+env = Environment()
+
+if coverage != '':
+   # Add the path of Squish Coco compiler wrapper
+   env[ 'ENV' ][ 'PATH' ] = os.environ[ 'SQUISHCOCO' ] + pathsep + env[ 'ENV' ][ 'PATH' ] 
+   # TEMP variable need to be defined
+   env[ 'ENV' ][ 'TEMP' ] = os.environ[ 'TEMP' ]
+
+   # Set the compiler to Squish Coco wrappers
+   env[ 'CC' ]   = 'cs' + env[ 'CC' ] ;
+   env[ 'AR' ]   = 'cs' + env[ 'AR' ] ;
+   env[ 'LINK' ] = 'cs' + env[ 'LINK' ] ;
+
+   # Code coverage settings
+   coverageflags = coverage.split( ' ' )
+   env[ 'CCFLAGS' ]   = env[ 'CCFLAGS' ] + coverageflags ;
+   env[ 'ARFLAGS' ]   = env[ 'ARFLAGS' ] + coverageflags ;
+   env[ 'LINKFLAGS' ] = env[ 'LINKFLAGS' ] + coverageflags ;
+
+env.Program('hello', [ 'main.cpp', 'HelloWorld.c' ] )

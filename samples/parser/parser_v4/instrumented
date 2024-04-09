@@ -1,0 +1,14 @@
+#!/bin/bash
+
+. getcoco.sh			# Get Coco variables
+
+export PATH=$COCO_WRAPPER_DIR:$PATH
+export COVERAGESCANNER_ARGS='--cs-on'
+export COVERAGESCANNER_ARGS+=' --cs-mcdc'
+export COVERAGESCANNER_ARGS+=' --cs-mcc'
+export COVERAGESCANNER_ARGS+=' --cs-function-profiler=all'
+export COVERAGESCANNER_ARGS+=' --cs-exclude-path=../../cppunit-1.12.1'
+export COVERAGESCANNER_ARGS+=' --cs-exclude-file-abs-wildcard=*/unittests.cpp'
+export COVERAGESCANNER_ARGS+=' --cs-exclude-file-abs-wildcard=*/CppUnitListener.cpp'
+
+"$@"

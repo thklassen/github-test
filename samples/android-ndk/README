@@ -1,0 +1,11 @@
+Android NDK support for Squish Coco
+
+To install it:
+  execute ./install-ndk.sh
+
+To remove it:
+  execute ./uninstall-ndk.sh
+
+To instrument a source file:
+  export COVERAGESCANNER_ARGS=--cs-on
+  ndk-build -B

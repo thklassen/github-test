@@ -1,0 +1,12 @@
+--cs-memory-pool=64000 
+--cs-architecture=Kernel 
+--cs-on 
+--cs-condition 
+--cs-line 
+--cs-function 
+--cs-hit 
+--cs-full-instrumentation 
+--cs-coverage-save-function=coverage_init 
+--cs-custom-library-source=coverage.h
+--cs-trigger-function=DriverEntry  
+--cs-keep-instrumentation-files

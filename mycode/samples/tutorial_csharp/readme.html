@@ -1,0 +1,38 @@
+<HTML>
+    <HEAD>
+        <TITLE>C# Instrumentation Sample of an Application</TITLE>
+    </HEAD>
+<BODY>
+        <H1>C# Instrumentation Sample of an Application</H1>
+
+        <h2>Setup</H2>
+        Use "<TT>Start&rarr;Squish Coco&rarr;Build Environment Selection</TT>"
+        to select the Visual Studio toolchain to use.
+
+        <h2>Compiling</H2>
+        "<TT>Step 1 Build With Command Line Compiler</TT>" build
+        <TT>hello.exe</TT> and <TT>hello.exe.csmes</TT> which contains the
+        instrumented code of  <TT>tutorial.cs</TT>.
+
+        <h2>Executing</H2>
+
+        <h3>Manual Execution</H3>
+        "<TT>Step 2 Execute Application</TT>" opens a console window which
+        permits to execute <TT>hello.exe</TT>.
+        After each execution of it, a file <TT>hello.exe.csexe</TT> is
+        generated which is the execution report.
+
+        <h3>Batch Execution</H3>
+        "<TT>Step 2 Execute Test Suite</TT>" is a small batch file which
+        execute several times  <TT>hello.exe</TT>. This batch file also set the
+        execution name and the status (passed/fail) of each run.
+
+
+        <h2>Coverage Analysis</H2>
+
+        "<TT>Step 3 Code Coverage Analysis</TT>" opens
+        CoverageBrowser and permits to analyze the code coverage of the code in
+         the main application (<TT>hello.exe</TT>).
+
+</BODY>
+</HTML>

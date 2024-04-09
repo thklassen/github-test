@@ -1,0 +1,80 @@
+----------------------------------------------------------------------------
+                         Blinky Original Sample
+----------------------------------------------------------------------------
+
+The 'Blinky' project is a simple program for the ST 'STM32F103ZE'
+microcontroller using Keil 'MCBSTM32E' Evaluation Board, compliant to Cortex
+Microcontroller Software Interface Standard (CMSIS v2.0).  
+
+Example functionality:
+ - Clock Settings:
+   - XTAL    =            8.00 MHz
+   - SYSCLK  =           72.00 MHz
+   - HCLK    = SYSCLK  = 72.00 MHz
+
+ - Sys Timer is used in interrupt mode
+ - LEDs are blinking with speed depending on SysTick timer interrupt period
+ 
+
+The Blinky program is available in different targets:
+
+  STM32F103 Flash:  runs from Internal Flash located on chip
+                    (used for production or target debugging)
+                    
+  STM32F103 RAM:    configured for on-chip RAM
+                    (used for target debugging)
+
+----------------------------------------------------------------------------
+                       Code Coverage Analysis
+----------------------------------------------------------------------------
+
+To enable the code coverage analysis it is first necessary to compile the
+project with Squish Coco compiler wrapper for ARM.
+
+Processed as followings:
+ 1) Select the Squish Coco tool chain instead of the original ARM toolchain.
+    a) On the uVision IDE click on 
+        "Project"->"Manage"->"Components, Environments, Books...".
+    b) Click on "Folders/Extensions", and replace in the field 
+        "ARMCC Folder:" ".\ARMCC\bin" through ".\SquishCoco\bin".
+ 2) Activate the code coverage analysis during the compilation
+    a) Click on "Project"->"Option for Target STM32F103 Flash (SIM)"
+    b) On the "C/C++" tab, add --cs-on into the "Misc Controls" field.
+    c) On the "Linker" tab, add --cs-on into the "Misc Controls" field.
+
+The project is now configured to generate code coverage information. Rebuild
+it and start the simulation:
+  1) Click on "Project"->"Rebuild all target files"
+
+The code coverage analysis is generated to the ITM-LOG channel number 10. Of
+course this channel is only available for the simulator and for a real
+environment it is necessary to choose an other communication way to
+transmit the code coverage information (for example: a dedicated UART, per
+ethernet using FTP or SFTP, ...) .
+Using the function __coveragescanner_set_custom_io() it is possible to
+specify this communication functions. (cf: __coveragescanner_set_custom_io()
+in Blinky.c)
+
+View the code coverage data, proceed as followings:
+  1) Click on "Debug"->"Start/Stop Debug Session"
+  2) In the command window enter:
+     > ITMLOG 10 > c:\coverage.csexe
+     This will save the output of the ITM channel 10 to c:\coverage.csexe
+  3) Open the debug console. Click on 
+      "View"->"Serial Windows"->"Debug (printf) Viewer".
+  3) Execute the application. Click on "Debug"->"Run"
+     Wait until the message "End of the application" is displayed on the
+     debug console.
+  4) Stop the execution. Click on "Debug"->"Stop" and 
+      "Debug"->"Start/Stop Debug Session".
+
+Start now CoverageBrowser to inspect the code coverage information:
+  1) Load Blinky.axf.csmes into CoverageBrowser.  Click on
+     "File"->"Open...", and select %SQUISHCOCO%\ARM_KEIL\Flash\Blinky.axf.csmes
+  2) Load the execution report. 
+     a) Click on "File"->"Load Execution Report..."
+     b) Enter in the "Filename:" field c:\coverage.csexe and click on
+        "Import"
+
+
+

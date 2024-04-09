@@ -1,0 +1,19 @@
+package require Itcl
+
+itcl::class Point {
+    private variable x
+    private variable y
+
+    constructor { _x _y } {
+        set x $_x
+        set y $_y
+    }
+
+    public method getX { } {
+        return $x
+    }
+
+    public method getY { } {
+        return $y
+    }
+}

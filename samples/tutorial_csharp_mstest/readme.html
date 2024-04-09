@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+<TITLE>C# MSTest Sample</TITLE>
+</HEAD>
+<BODY>
+
+<H1>Instrumenting The C# Library</H1>
+<P>
+Instrument the C# <TT>Tutorial.DLL</TT> library by adding <TT>COVERAGESCANNER_COVERAGE_ON</TT> to the conditional compilation symbols. The test DLL may not be instrumented.
+</p>
+
+<H1>Recording The Code Coverage for Each Unit Test</H1>
+
+<P>
+To record the code coverage for each single unit test it is necessary to modify the tests as followings:
+<UL>
+    <LI> The unit test should be inherit the class <TT>Coverage</TT> </LI>
+    <LI> Add to the member <TT>TestContext</TT> the attribute <TT>override</TT> </LI>
+</LI>
+</UL>
+</p>
+
+<P>
+The <TT>Coverage</TT> class will record the code coverage of each C# unit test
+for the instrumented code which is executed.
+
+Its code  is provided as sample in the file
+<tt>coverge.cs</tt> and should be adapted to the projects needs.
+</p>
+
+<P>
+<TABLE border="0">
+    <TR>
+    <TD>
+        Note:&nbsp;
+    </TD>
+    <TD>
+        If an unit test does not inherit <TT>Coverage</TT>, then all coverage informations are stored in one execution report called <TT>"unknown"</TT>.
+    </TD>
+    </TR>
+</TABLE>
+</p>
+
+</BODY>
+</HTML>
+
